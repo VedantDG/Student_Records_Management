@@ -1,0 +1,608 @@
+<!doctype html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Student Management System</title>
+<link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/css/bootstrap.min.css"
+rel="stylesheet"
+integrity="sha384-QWTKZyjpPEjISv5WaRU9OFeRpok6YctnYmDr5pNlyT2bRjXh0JMhjY6hW+ALEwIH"
+crossorigin="anonymous">
+<link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+<style>
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+:root {
+    --primary-navy: #1e293b;
+    --secondary-slate: #334155;
+    --accent-blue: #3b82f6;
+    --light-blue: #e0f2fe;
+    --soft-gray: #f8fafc;
+    --medium-gray: #64748b;
+    --dark-gray: #475569;
+    --white: #ffffff;
+    --success-green: #10b981;
+    --warning-amber: #f59e0b;
+    --danger-red: #ef4444;
+    --border-color: #e2e8f0;
+    --shadow-light: 0 1px 3px rgba(0, 0, 0, 0.1);
+    --shadow-medium: 0 4px 12px rgba(0, 0, 0, 0.1);
+    --shadow-heavy: 0 8px 32px rgba(0, 0, 0, 0.12);
+}
+
+body {
+    font-family: 'Inter', -apple-system, BlinkMacSystemFont, 'Segoe UI', sans-serif;
+    background: linear-gradient(135deg, var(--soft-gray) 0%, #f1f5f9 100%);
+    min-height: 100vh;
+    color: var(--primary-navy);
+    line-height: 1.6;
+    font-weight: 400;
+}
+
+.main-container {
+    max-width: 1200px;
+    margin: 0 auto;
+    padding: 2rem;
+    position: relative;
+}
+
+.page-header {
+    text-align: center;
+    margin-bottom: 3rem;
+    position: relative;
+}
+
+.page-header::before {
+    content: '';
+    position: absolute;
+    top: -1rem;
+    left: 50%;
+    transform: translateX(-50%);
+    width: 80px;
+    height: 4px;
+    background: var(--accent-blue);
+    border-radius: 2px;
+}
+
+.page-title {
+    font-size: 2.5rem;
+    font-weight: 700;
+    color: var(--primary-navy);
+    margin-bottom: 0.5rem;
+    letter-spacing: -0.025em;
+}
+
+.page-subtitle {
+    color: var(--medium-gray);
+    font-size: 1.1rem;
+    font-weight: 400;
+}
+
+.form-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2rem;
+    margin-bottom: 2rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.form-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--accent-blue), #60a5fa);
+}
+
+.section-title {
+    font-size: 1.5rem;
+    font-weight: 600;
+    color: var(--primary-navy);
+    margin-bottom: 1.5rem;
+    position: relative;
+    padding-left: 1rem;
+}
+
+.section-title::before {
+    content: '';
+    position: absolute;
+    left: 0;
+    top: 50%;
+    transform: translateY(-50%);
+    width: 4px;
+    height: 20px;
+    background: var(--accent-blue);
+    border-radius: 2px;
+}
+
+#headers {
+    display: grid;
+    grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+    gap: 1.5rem;
+    margin-bottom: 2rem;
+}
+
+.form-field {
+    position: relative;
+}
+
+.form-label {
+    display: block;
+    font-size: 0.875rem;
+    font-weight: 500;
+    color: var(--secondary-slate);
+    margin-bottom: 0.5rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+}
+
+.form-control {
+    width: 100%;
+    padding: 0.875rem 1rem;
+    border: 2px solid var(--border-color);
+    border-radius: 8px;
+    font-size: 1rem;
+    background: var(--white);
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    font-weight: 400;
+}
+
+.form-control:focus {
+    outline: none;
+    border-color: var(--accent-blue);
+    box-shadow: 0 0 0 3px rgba(59, 130, 246, 0.1);
+    transform: translateY(-1px);
+}
+
+.form-control:hover {
+    border-color: var(--secondary-slate);
+}
+
+.submit-container {
+    text-align: center;
+    margin-top: 1.5rem;
+}
+
+.submit {
+    padding: 0.875rem 2rem;
+    font-size: 1rem;
+    font-weight: 600;
+    border-radius: 8px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    min-width: 140px;
+    position: relative;
+    overflow: hidden;
+}
+
+.submit::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: -100%;
+    width: 100%;
+    height: 100%;
+    background: rgba(255, 255, 255, 0.2);
+    transition: left 0.3s ease;
+}
+
+.submit:hover::before {
+    left: 100%;
+}
+
+.btn-primary {
+    background: var(--accent-blue);
+    color: var(--white);
+    box-shadow: var(--shadow-light);
+}
+
+.btn-primary:hover {
+    background: #2563eb;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.btn-success {
+    background: var(--success-green);
+    color: var(--white);
+    box-shadow: var(--shadow-light);
+}
+
+.btn-success:hover {
+    background: #059669;
+    transform: translateY(-2px);
+    box-shadow: var(--shadow-medium);
+}
+
+.table-section {
+    background: var(--white);
+    border-radius: 16px;
+    padding: 2rem;
+    box-shadow: var(--shadow-medium);
+    border: 1px solid var(--border-color);
+    position: relative;
+    overflow: hidden;
+}
+
+.table-section::before {
+    content: '';
+    position: absolute;
+    top: 0;
+    left: 0;
+    right: 0;
+    height: 4px;
+    background: linear-gradient(90deg, var(--secondary-slate), var(--medium-gray));
+}
+
+.table-container {
+    overflow-x: auto;
+    border-radius: 12px;
+    border: 1px solid var(--border-color);
+}
+
+.table {
+    margin-bottom: 0;
+    background: var(--white);
+}
+
+.table thead th {
+    background: var(--primary-navy);
+    color: var(--white);
+    font-weight: 600;
+    font-size: 0.875rem;
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    padding: 1rem;
+    border: none;
+    position: relative;
+}
+
+.table thead th:first-child {
+    border-top-left-radius: 12px;
+}
+
+.table thead th:last-child {
+    border-top-right-radius: 12px;
+}
+
+.table tbody tr {
+    transition: all 0.3s ease;
+    border-bottom: 1px solid var(--border-color);
+}
+
+.table tbody tr:hover {
+    background: rgba(59, 130, 246, 0.02);
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+.table tbody tr:last-child {
+    border-bottom: none;
+}
+
+.table tbody tr:last-child td:first-child {
+    border-bottom-left-radius: 12px;
+}
+
+.table tbody tr:last-child td:last-child {
+    border-bottom-right-radius: 12px;
+}
+
+.table td {
+    padding: 1rem;
+    vertical-align: middle;
+    border: none;
+    font-size: 0.9rem;
+    color: var(--secondary-slate);
+}
+
+.action-buttons {
+    display: flex;
+    gap: 0.5rem;
+    justify-content: flex-start;
+}
+
+.btn-sm {
+    padding: 0.5rem 1rem;
+    font-size: 0.75rem;
+    font-weight: 600;
+    border-radius: 6px;
+    border: none;
+    cursor: pointer;
+    transition: all 0.3s cubic-bezier(0.4, 0, 0.2, 1);
+    text-transform: uppercase;
+    letter-spacing: 0.05em;
+    position: relative;
+    overflow: hidden;
+}
+
+.btn-warning {
+    background: var(--warning-amber);
+    color: var(--white);
+}
+
+.btn-warning:hover {
+    background: #d97706;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+.btn-danger {
+    background: var(--danger-red);
+    color: var(--white);
+}
+
+.btn-danger:hover {
+    background: #dc2626;
+    transform: translateY(-1px);
+    box-shadow: var(--shadow-light);
+}
+
+.empty-state {
+    text-align: center;
+    padding: 3rem 2rem;
+    color: var(--medium-gray);
+}
+
+.empty-state-icon {
+    font-size: 3rem;
+    margin-bottom: 1rem;
+    opacity: 0.5;
+}
+
+@media (max-width: 768px) {
+    .main-container {
+        padding: 1rem;
+    }
+    
+    .page-title {
+        font-size: 2rem;
+    }
+    
+    #headers {
+        grid-template-columns: 1fr;
+        gap: 1rem;
+    }
+    
+    .form-section,
+    .table-section {
+        padding: 1.5rem;
+    }
+    
+    .action-buttons {
+        flex-direction: column;
+        align-items: stretch;
+    }
+    
+    .btn-sm {
+        width: 100%;
+        margin-bottom: 0.25rem;
+    }
+}
+
+@media (max-width: 576px) {
+    .table-container {
+        font-size: 0.8rem;
+    }
+    
+    .table th,
+    .table td {
+        padding: 0.75rem 0.5rem;
+    }
+}
+
+/* Subtle animations */
+@keyframes fadeInUp {
+    from {
+        opacity: 0;
+        transform: translateY(20px);
+    }
+    to {
+        opacity: 1;
+        transform: translateY(0);
+    }
+}
+
+.form-section,
+.table-section {
+    animation: fadeInUp 0.6s ease-out;
+}
+
+.form-field {
+    animation: fadeInUp 0.6s ease-out;
+    animation-fill-mode: both;
+}
+
+.form-field:nth-child(1) { animation-delay: 0.1s; }
+.form-field:nth-child(2) { animation-delay: 0.2s; }
+.form-field:nth-child(3) { animation-delay: 0.3s; }
+.form-field:nth-child(4) { animation-delay: 0.4s; }
+</style>
+</head>
+<body>
+<div class="main-container">
+    <div class="page-header">
+        <h1 class="page-title">Student Management</h1>
+        <p class="page-subtitle">Manage student information with ease</p>
+    </div>
+
+    <div class="form-section">
+        <h2 class="section-title">Student Information</h2>
+        <div id="headers"></div>
+        <div class="submit-container">
+            <button type='button' class="submit btn btn-primary">Submit</button>
+        </div>
+    </div>
+
+    <div class="table-section">
+        <h2 class="section-title">Student Records</h2>
+        <div class="table-container">
+            <div id="tables"></div>
+        </div>
+    </div>
+</div>
+
+<script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.3/dist/js/bootstrap.bundle.min.js"
+integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz"
+crossorigin="anonymous"></script>
+<script>
+document.addEventListener("DOMContentLoaded", function () {
+    var keys = ['Name', 'Class', 'Division', 'Roll_no'];
+
+    var headersDiv = document.getElementById("headers");
+
+    // Dynamically create input fields
+    keys.forEach((key) => {
+        var div = document.createElement("div");
+        div.className = "form-field mb-2";
+
+        var label = document.createElement("label");
+        label.textContent = key.replace('_', ' ') + ": ";
+        label.className = "form-label";
+
+        var input = document.createElement("input");
+        input.type = "text";
+        input.className = "form-control";
+        input.id = key.toLowerCase();
+
+        div.appendChild(label);
+        div.appendChild(input);
+        headersDiv.appendChild(div);
+    });
+
+    var submitButton = document.querySelector(".submit");
+    var tablesDiv = document.getElementById("tables");
+
+    var table = document.createElement("table");
+    table.className = "table table-bordered mt-3";
+
+    var thead = document.createElement("thead");
+    var tbody = document.createElement("tbody");
+    tbody.id = "table-body"; 
+
+    var headerRow = document.createElement("tr");
+    keys.forEach((key) => {
+        var th = document.createElement("th");
+        th.textContent = key.replace('_', ' ');
+        headerRow.appendChild(th);
+    });
+
+    var actionTh = document.createElement("th");
+    actionTh.textContent = "Actions";
+    headerRow.appendChild(actionTh);
+
+    thead.appendChild(headerRow);
+    table.appendChild(thead);
+    table.appendChild(tbody);
+    tablesDiv.appendChild(table);
+
+    var editIndex = null; 
+
+    function loadStoredData() {
+        var storedData = JSON.parse(localStorage.getItem("tableData")) || [];
+        var tableBody = document.getElementById("table-body");
+        tableBody.innerHTML = ""; 
+
+        storedData.forEach((rowData, index) => addRowToTable(rowData, index));
+    }
+
+    function addRowToTable(rowData, index) {
+        var newRow = document.createElement("tr");
+
+        keys.forEach((key) => {
+            var td = document.createElement("td");
+            td.textContent = rowData[key.toLowerCase()] || "";
+            newRow.appendChild(td);
+        });
+
+        var editButton = document.createElement("button");
+        editButton.textContent = "Edit";
+        editButton.className = "btn btn-warning btn-sm me-2";
+        editButton.onclick = function () {
+            editRow(index);
+        };
+
+        var deleteButton = document.createElement("button");
+        deleteButton.textContent = "Delete";
+        deleteButton.className = "btn btn-danger btn-sm";
+        deleteButton.onclick = function () {
+            deleteRow(index);
+        };
+
+        var actionTd = document.createElement("td");
+        var actionContainer = document.createElement("div");
+        actionContainer.className = "action-buttons";
+        actionContainer.appendChild(editButton);
+        actionContainer.appendChild(deleteButton);
+        actionTd.appendChild(actionContainer);
+        newRow.appendChild(actionTd);
+
+        document.getElementById("table-body").appendChild(newRow);
+    }
+
+    loadStoredData(); 
+
+    submitButton.addEventListener("click", function () {
+        var rowData = {};
+        keys.forEach((key) => {
+            var inputField = document.getElementById(key.toLowerCase());
+            rowData[key.toLowerCase()] = inputField.value.trim();
+            inputField.value = ""; 
+        });
+
+        var storedData = JSON.parse(localStorage.getItem("tableData")) || [];
+
+        if (editIndex !== null) {
+            storedData[editIndex] = rowData;  
+            editIndex = null; 
+        } else {
+            storedData.push(rowData);  
+        }
+
+        localStorage.setItem("tableData", JSON.stringify(storedData));
+
+        submitButton.textContent = "Submit";
+        submitButton.classList.remove("btn-success");
+        submitButton.classList.add("btn-primary");
+
+        loadStoredData(); 
+    });
+
+    function deleteRow(index) {
+        var storedData = JSON.parse(localStorage.getItem("tableData")) || [];
+        storedData.splice(index, 1);
+        localStorage.setItem("tableData", JSON.stringify(storedData));
+
+        loadStoredData();
+    }
+
+    function editRow(index) {
+        var storedData = JSON.parse(localStorage.getItem("tableData")) || [];
+        var rowData = storedData[index];
+
+        keys.forEach((key) => {
+            document.getElementById(key.toLowerCase()).value = rowData[key.toLowerCase()];
+        });
+
+        editIndex = index;  
+
+        submitButton.textContent = "Update";
+        submitButton.classList.remove("btn-primary");
+        submitButton.classList.add("btn-success");
+    }
+});
+</script>
+</body>
+</html>
